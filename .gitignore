@@ -1,0 +1,31 @@
+# binary
+src/horgand
+
+# object
+*.o
+
+# backup
+*~
+
+# configure
+Makefile
+config.h
+config.log
+config.status
+stamp-h1
+.deps/
+.libs/
+
+# autoconf, automake, autoheader
+Makefile.in
+config.h.in
+/autom4te.cache/
+/aclocal.m4
+/compile
+/config.sub
+/configure
+/depcomp
+/install-sh
+/missing
+/mkinstalldirs
+/INSTALL
