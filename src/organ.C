@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <sys/stat.h>
 #include <Fl/Fl_Preferences.H>
 #include "Holrgan.h"
 
@@ -911,7 +912,6 @@ void HOR::init_hor()
 {
 
     int val = 0;
-    char nomfile[128];
     char orden[256];
 
     // ALSA init
@@ -934,19 +934,26 @@ void HOR::init_hor()
 
     horgand.get("FirstTime", val, 0);
 
-    if (val == 0) {
+    char userdatadir[128];
+    sprintf(userdatadir, "%s%s", getenv("HOME"), "/.horgand");
 
-        bzero(nomfile, sizeof(nomfile));
+    // check directory existence
+    struct stat st;
+    if (stat(userdatadir, &st) != 0 || !S_ISDIR(st.st_mode))
+        val = 0;
+
+    if (val == 0) {
+        fprintf(stderr, "Initialize user data: %s\n", userdatadir);
+
         bzero(orden, sizeof(orden));
-        sprintf(nomfile, "%s%s", getenv("HOME"), "/.horgand");
-        sprintf(orden, "mkdir %s", nomfile);
+        sprintf(orden, "mkdir %s", userdatadir);
         system(orden);
         bzero(orden, sizeof(orden));
-        sprintf(orden, "cp %s/* %s", DATADIR, nomfile);
+        sprintf(orden, "cp %s/* %s", DATADIR, userdatadir);
         system(orden);
         horgand.set("FirstTime", 1);
-        sprintf(BankFilename, "%s/Default.horeb", nomfile);
-        sprintf(RhythmFilename, "%s/Rhythm_List.txt", nomfile);
+        sprintf(BankFilename, "%s/Default.horeb", userdatadir);
+        sprintf(RhythmFilename, "%s/Rhythm_List.txt", userdatadir);
         horgand.set("Bank Filename", BankFilename);
         horgand.set("Rhythm Filename", RhythmFilename);
         bzero(orden, sizeof(orden));
