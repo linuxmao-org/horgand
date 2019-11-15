@@ -398,7 +398,7 @@ struct Ch3
 struct Ch4
 
 {
-  char Nom[10];
+  char Nom[12];
   int type;
   int fund;
   int dist1;
