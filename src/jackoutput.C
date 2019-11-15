@@ -44,7 +44,7 @@ JACKstart(HOR *hor_)
 {
 
   JackOUT=hor_; 
-  jackclient = jack_client_new ("Horgand");
+  jackclient = jack_client_open ("Horgand", JackNoStartServer, nullptr);
   if (jackclient == 0)
     {
       fprintf (stderr, "Cannot make a jack client, back to Alsa\n");
