@@ -28,7 +28,6 @@
 #include <alsa/asoundlib.h>
 #include <sndfile.h>
 #include <X11/xpm.h>
-#include "config.h"
 #define MPERIOD 128
 #define BUFSIZE 512
 #define POLY 32
