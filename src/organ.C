@@ -925,6 +925,7 @@ void HOR::init_hor()
     // Create Alsa Seq Client
 
     sprintf(portname, "Horgand IN");
+    snd_seq_set_client_name(midi_in, "Horgand");
     alsaport = snd_seq_create_simple_port(midi_in, portname,
                                           SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SUBS_WRITE,
                                           SND_SEQ_PORT_TYPE_SYNTH);
