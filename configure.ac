@@ -1,6 +1,7 @@
 AC_PREREQ(2.61)
-AC_INIT([horgand],[1.14],[holborn@telefonica.net]) 
-AM_INIT_AUTOMAKE(horgand,1.14)
+AC_INIT([horgand],[1.14],[holborn@telefonica.net])
+AM_INIT_AUTOMAKE([])
+AM_SILENT_RULES([yes])
 AC_CONFIG_SRCDIR([src/main.C])
 AC_CONFIG_HEADER([src/config.h])
 
