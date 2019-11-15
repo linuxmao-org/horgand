@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION "3.3")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 project(horgand VERSION "1.14" LANGUAGES C CXX)
-set(PROJECT_WEBSITE "https://github.com/linuxmao-org/horgand")
+set(PROJECT_WEBSITE "horgand.berlios.de")
 
 include(GNUInstallDirs)
 
