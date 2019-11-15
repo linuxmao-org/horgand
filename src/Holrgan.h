@@ -92,8 +92,10 @@ public:
     void loadbank(char *filename);
     void loadrhyt(char *filename);
     void Put_Period();
-    void ossaudioprepare();
-    void alsaaudioprepare();
+    bool audioprepare();
+    bool ossaudioprepare();
+    bool alsaaudioprepare();
+    bool jackaudioprobe();
     void savefile(char *filename);
     void loadfile(char *filename);
     void savebank(char *filename);

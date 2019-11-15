@@ -969,20 +969,41 @@ void HOR::init_hor()
 
     char temp[512];
 
-    horgand.get("Audio Out device", temp, "Alsa", 127);
+    Salida = 0;
+    const char *NameSalida[] = {
+        "Detect",
+        "OSS",
+        "Alsa",
+        "Jack",
+    };
 
+    horgand.get("Audio Out device", temp, NameSalida[Salida], 127);
 
     if (strstr(temp, "OSS") != NULL)
         Salida = 1;
-    if (strstr(temp, "Alsa") != NULL)
+    else if (strstr(temp, "Alsa") != NULL)
         Salida = 2;
-    if (strstr(temp, "Jack") != NULL)
+    else if (strstr(temp, "Jack") != NULL)
         Salida = 3;
 
-    if (Salida == 1)
-        ossaudioprepare();
-    if (Salida == 2)
-        alsaaudioprepare();
+    if (Salida == 0 || !audioprepare()) {
+        if (Salida != 0) {
+            fprintf(stderr, "Could not open the audio output `%s`, trying another.\n", temp);
+        }
+        bool success = false;
+        int triedOutput = Salida;
+        for (int i = 3; i >= 1 && !success; --i) {
+            fprintf(stderr, "Attempt to open the audio output `%s`.\n", NameSalida[i]);
+            if (i != triedOutput) {
+                Salida = i;
+                success = audioprepare();
+            }
+        }
+        if (!success) {
+            fprintf(stderr, "Could not open any audio output.\n");
+            exit(1);
+        }
+    }
 
     // Load Preset Bank File
 

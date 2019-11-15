@@ -23,6 +23,7 @@
 
 
 #include "Holrgan.h"
+#include <jack/jack.h>
 #include <sys/soundcard.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>
@@ -78,10 +79,30 @@ void HOR::Final_Output(int S_Output)
 };
 
 
+// AUDIO OUT
+
+bool HOR::audioprepare()
+{
+    switch (Salida) {
+    case 1:
+        return ossaudioprepare();
+    case 2:
+        return alsaaudioprepare();
+    case 3:
+        return true;
+    }
+    return false;
+}
+
 // OSS AUDIO OUT Check and prepare
 
-void HOR::ossaudioprepare()
+bool HOR::ossaudioprepare()
 {
+    snd_handle = open("/dev/dsp", O_WRONLY, 0);
+    if (snd_handle == -1) {
+        fprintf(stderr, "ERROR - I can't open  /dev/dsp \n");
+        return false;
+    };
 
     int snd_bitsize = 16;
     SAMPLE_RATE = DSAMPLE_RATE;
@@ -91,11 +112,6 @@ void HOR::ossaudioprepare()
     snd_samplerate = SAMPLE_RATE;
     PERIOD = MPERIOD;
     Put_Period();
-    snd_handle = open("/dev/dsp", O_WRONLY, 0);
-    if (snd_handle == -1) {
-        fprintf(stderr, "ERROR - I can't open  /dev/dsp \n");
-        return;
-    };
     ioctl(snd_handle, SNDCTL_DSP_RESET, NULL);
 
     ioctl(snd_handle, SNDCTL_DSP_SETFMT, &snd_format);
@@ -103,11 +119,12 @@ void HOR::ossaudioprepare()
     ioctl(snd_handle, SNDCTL_DSP_SPEED, &snd_samplerate);
     ioctl(snd_handle, SNDCTL_DSP_SAMPLESIZE, &snd_bitsize);
     ioctl(snd_handle, SNDCTL_DSP_SETFRAGMENT, &snd_fragment);
+    return true;
 };
 
 // ALSA AUDIO OUT Check and prepare
 
-void HOR::alsaaudioprepare()
+bool HOR::alsaaudioprepare()
 {
     char pcm_name[50];
     sprintf(pcm_name, "plughw:0,0");
@@ -115,7 +132,7 @@ void HOR::alsaaudioprepare()
 
     if (snd_pcm_open(&playback_handle, pcm_name, SND_PCM_STREAM_PLAYBACK, 0) < 0) {
         fprintf(stderr, "cannot open audio device %s\n", pcm_name);
-        exit(1);
+        return false;
     }
     PERIOD = MPERIOD;
     SAMPLE_RATE = DSAMPLE_RATE;
@@ -134,4 +151,14 @@ void HOR::alsaaudioprepare()
     snd_pcm_sw_params_current(playback_handle, sw_params);
     snd_pcm_sw_params_set_avail_min(playback_handle, sw_params, PERIOD);
     snd_pcm_sw_params(playback_handle, sw_params);
+    return true;
 };
+
+bool HOR::jackaudioprobe()
+{
+    jack_client_t *client = jack_client_open("Horgand test client", JackNoStartServer, nullptr);
+    if (!client)
+        return false;
+    jack_client_close(client);
+    return true;
+}
