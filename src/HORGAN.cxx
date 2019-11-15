@@ -124,7 +124,7 @@ void HORGAN::cb_Load(Fl_Menu_* o, void* v) {
 void HORGAN::cb_Save_i(Fl_Menu_*, void*) {
   char *filename;
 #define EXT ".hor"
-filename=fl_file_chooser("Preset Save:","(*"EXT")",hor->a[0].Name,0);
+filename=fl_file_chooser("Preset Save:","(*" EXT ")",hor->a[0].Name,0);
 if (filename==NULL) return;
 filename=fl_filename_setext(filename,EXT);
 #undef EXT
@@ -165,7 +165,7 @@ void HORGAN::cb_Load2(Fl_Menu_* o, void* v) {
 void HORGAN::cb_Save2_i(Fl_Menu_*, void*) {
   char *filename;
 #define EXT ".txt"
-filename=fl_file_chooser("Save:","(*"EXT")",NULL,0);
+filename=fl_file_chooser("Save:","(*" EXT ")",NULL,0);
 if (filename==NULL) return;
 filename=fl_filename_setext(filename,EXT);
 #undef EXT
@@ -2297,7 +2297,7 @@ void HORGAN::cb_BLoad(Fl_Menu_* o, void* v) {
 void HORGAN::cb_BSave_i(Fl_Menu_*, void*) {
   char *filename;
 #define EXT ".horeb"
-filename=fl_file_chooser("Bank Save:","(*"EXT")",hor->SavedBank,0);
+filename=fl_file_chooser("Bank Save:","(*" EXT ")",hor->SavedBank,0);
 if (filename==NULL) return;
 filename=fl_filename_setext(filename,EXT);
 #undef EXT
