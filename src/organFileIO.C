@@ -27,741 +27,692 @@
 
 #define BANK_EXTENSION ".horeb"
 
-void
-HOR::savefile (char *filename)
+void HOR::savefile(char *filename)
 {
 
-  int i;
-  FILE *fn;
-  char buf[2048];
-  fn = fopen (filename, "w");
+    int i;
+    FILE *fn;
+    char buf[2048];
+    fn = fopen(filename, "w");
 
-  bzero(buf,sizeof(buf));
-  sprintf(buf,"%s\n",VERSION);
-  fputs(buf,fn);
+    bzero(buf, sizeof(buf));
+    sprintf(buf, "%s\n", VERSION);
+    fputs(buf, fn);
 
-  for (i = 1; i <= 10; i++)
-    {
-      bzero (buf, sizeof (buf));
-      sprintf (buf, "%d,%f,%f,%d\n", a[0].Operator[i].harmonic,
-	       a[0].Operator[i].harmonic_fine,a[0].Operator[i].volumen,a[0].Operator[i].marimba);
-      fputs (buf, fn);
+    for (i = 1; i <= 10; i++) {
+        bzero(buf, sizeof(buf));
+        sprintf(buf, "%d,%f,%f,%d\n", a[0].Operator[i].harmonic,
+                a[0].Operator[i].harmonic_fine, a[0].Operator[i].volumen,
+                a[0].Operator[i].marimba);
+        fputs(buf, fn);
     }
 
-  bzero (buf, sizeof (buf));
-  sprintf (buf, "%f,%d,%f,%f,%f,%d,%f,%f\n",
-	   a[0].Organ_Master_Volume, a[0].organ_transpose, a[0].Pitch_LFO_Speed, a[0].Pitch_LFO_Delay, a[0].Rotary_LFO_Speed, a[0].E_Rotary_On, a[0].LFOpitch,
-	   a[0].modulation);
-  fputs (buf, fn);
-  bzero (buf, sizeof (buf));
-  sprintf (buf, "%f,%d,%f,%d,%f,%f\n", a[0].attack, a[0].E_Reverb_On, a[0].detune, a[0].E_Delay_On,
-	   a[0].Delay_Delay, a[0].Delay_Volume);
-  fputs (buf, fn);
-  bzero (buf, sizeof (buf));
-  sprintf (buf, "%d,%d,%f,%d,%f,%f,%f\n", a[0].scaling, a[0].E_Chorus_On, a[0].Chorus_Delay, a[0].Reverb_Preset,
-	   a[0].Chorus_LFO_Speed, a[0].Chorus_LFO_Amplitude, a[0].Chorus_Volume);
-  fputs (buf, fn);
-  bzero (buf, sizeof (buf));
-  sprintf (buf, "%f,%f,%f,%f,%f\n", a[0].decay, a[0].sustain, a[0].p_attack, a[0].p_decay,
-             a[0].Rotary_LFO_Amplitude);
-  fputs (buf, fn);
-  for (i = 1; i <= 22; i++)
-  {           
-  bzero (buf, sizeof (buf));
-  sprintf (buf, "%f\n",a[0].Normalize[i]);
-  fputs (buf, fn);
-  }
-
-  bzero (buf, sizeof (buf));
-  sprintf (buf, "%d,%d,%f,%f,%f,%f,%f,%f\n", a[0].Speed_Sync,a[0].Click,a[0].Click_Vol,a[0].Click2_Vol,a[0].Click_Freq,a[0].Click_Freq2,a[0].Click_Vol1,a[0].Click_Vol2);
-  fputs (buf, fn);
- 
-  for (i = 1; i <= 10; i++)
-      {
-            bzero (buf, sizeof (buf));
-            sprintf (buf, "%d\n",a[0].Operator[i].wave);
-            fputs(buf,fn);
-      }
-
-  bzero (buf, sizeof (buf));
-  sprintf (buf, "%d,%d,%d\n",a[0].LFO_Wave,a[0].Chorus_Wave,a[0].Rotary_Wave);
-  fputs (buf, fn);
-
-  bzero (buf, sizeof (buf));
-  fputs (a[0].nombre, fn);
-  fputs ("\n", fn);
-  fclose (fn);
-
-};
-
-void
-HOR::loadfile (char *filename)
-{
-
-  int i;
-  FILE *fn;
-  char buf[2048];
-  float Data_Version;
-
-  if ((fn = fopen (filename, "r")) == NULL) return;
-
-  
-  bzero (buf, sizeof (buf));
-  fgets (buf, sizeof buf, fn);
-  sscanf(buf, "%f\n",&Data_Version);          
-  
-  
-
-  if (Data_Version < 1.11)
-     {
-      printf("old file format not supported\n");     
-      fclose(fn);
-      return;
-     } 
-
-  New();
-
-  for (i = 1; i <= 10; i++)
-    {
-      bzero (buf, sizeof (buf));
-      fgets (buf, sizeof buf, fn);
-      sscanf (buf, "%d,%f,%f,%d", &a[0].Operator[i].harmonic,
-	      &a[0].Operator[i].harmonic_fine,&a[0].Operator[i].volumen,&a[0].Operator[i].marimba);
+    bzero(buf, sizeof(buf));
+    sprintf(buf, "%f,%d,%f,%f,%f,%d,%f,%f\n", a[0].Organ_Master_Volume,
+            a[0].organ_transpose, a[0].Pitch_LFO_Speed, a[0].Pitch_LFO_Delay,
+            a[0].Rotary_LFO_Speed, a[0].E_Rotary_On, a[0].LFOpitch, a[0].modulation);
+    fputs(buf, fn);
+    bzero(buf, sizeof(buf));
+    sprintf(buf, "%f,%d,%f,%d,%f,%f\n", a[0].attack, a[0].E_Reverb_On,
+            a[0].detune, a[0].E_Delay_On, a[0].Delay_Delay, a[0].Delay_Volume);
+    fputs(buf, fn);
+    bzero(buf, sizeof(buf));
+    sprintf(buf, "%d,%d,%f,%d,%f,%f,%f\n", a[0].scaling, a[0].E_Chorus_On,
+            a[0].Chorus_Delay, a[0].Reverb_Preset, a[0].Chorus_LFO_Speed,
+            a[0].Chorus_LFO_Amplitude, a[0].Chorus_Volume);
+    fputs(buf, fn);
+    bzero(buf, sizeof(buf));
+    sprintf(buf, "%f,%f,%f,%f,%f\n", a[0].decay, a[0].sustain, a[0].p_attack,
+            a[0].p_decay, a[0].Rotary_LFO_Amplitude);
+    fputs(buf, fn);
+    for (i = 1; i <= 22; i++) {
+        bzero(buf, sizeof(buf));
+        sprintf(buf, "%f\n", a[0].Normalize[i]);
+        fputs(buf, fn);
     }
 
-  bzero (buf, sizeof (buf));
-  fgets (buf, sizeof buf, fn);
-  sscanf (buf,
-	  "%f,%d,%f,%f,%f,%d,%f,%f", &a[0].Organ_Master_Volume, &a[0].organ_transpose, &a[0].Pitch_LFO_Speed,
-	  &a[0].Pitch_LFO_Delay, &a[0].Rotary_LFO_Speed, &a[0].E_Rotary_On, &a[0].LFOpitch, &a[0].modulation);
+    bzero(buf, sizeof(buf));
+    sprintf(buf, "%d,%d,%f,%f,%f,%f,%f,%f\n", a[0].Speed_Sync, a[0].Click,
+            a[0].Click_Vol, a[0].Click2_Vol, a[0].Click_Freq, a[0].Click_Freq2,
+            a[0].Click_Vol1, a[0].Click_Vol2);
+    fputs(buf, fn);
 
-  bzero (buf, sizeof (buf));
-  fgets (buf, sizeof buf, fn);
-  sscanf (buf, "%f,%d,%f,%d,%f,%f", &a[0].attack, &a[0].E_Reverb_On, &a[0].detune, &a[0].E_Delay_On,
-	  &a[0].Delay_Delay, &a[0].Delay_Volume);
+    for (i = 1; i <= 10; i++) {
+        bzero(buf, sizeof(buf));
+        sprintf(buf, "%d\n", a[0].Operator[i].wave);
+        fputs(buf, fn);
+    }
 
-  bzero (buf, sizeof (buf));
-  fgets (buf, sizeof buf, fn);
-  sscanf
-    (buf, "%d,%d,%f,%d,%f,%f,%f\n", &a[0].scaling, &a[0].E_Chorus_On, &a[0].Chorus_Delay, &a[0].Reverb_Preset,
-     &a[0].Chorus_LFO_Speed, &a[0].Chorus_LFO_Amplitude, &a[0].Chorus_Volume);
+    bzero(buf, sizeof(buf));
+    sprintf(buf, "%d,%d,%d\n", a[0].LFO_Wave, a[0].Chorus_Wave, a[0].Rotary_Wave);
+    fputs(buf, fn);
 
-
-  bzero (buf, sizeof (buf));
-  fgets (buf, sizeof buf, fn);
-  sscanf (buf, "%f,%f,%f,%f,%f\n", &a[0].decay, &a[0].sustain, &a[0].p_attack, &a[0].p_decay,
-             &a[0].Rotary_LFO_Amplitude);
-  
-  for (i = 1; i <= 22; i++)
-  {           
-  bzero (buf, sizeof (buf));
-  fgets (buf, sizeof buf, fn);
-  sscanf (buf, "%f\n",&a[0].Normalize[i]);
-  
-  }
-
-  if (Data_Version >= 1.12)
-  {
-   bzero (buf, sizeof (buf));
-   fgets (buf, sizeof buf, fn);
-   sscanf (buf, "%d %d,%f,%f,%f,%f,%f,%f\n", &a[0].Speed_Sync,&a[0].Click,&a[0].Click_Vol,&a[0].Click2_Vol,&a[0].Click_Freq,&a[0].Click_Freq2,&a[0].Click_Vol1,&a[0].Click_Vol2);
-
-
-    for (i = 1; i <= 10; i++)
-     {
-       bzero (buf, sizeof (buf));
-       fgets (buf, sizeof buf, fn);
-       sscanf (buf, "%d\n",&a[0].Operator[i].wave);
-      }
-  }
-
- if (Data_Version>=1.13)
-   {
-   
-  bzero (buf, sizeof (buf));
-  fgets (buf, sizeof buf, fn);
-  sscanf (buf, "%d,%d,%d\n",&a[0].LFO_Wave,&a[0].Chorus_Wave,&a[0].Rotary_Wave);
-  
-   }
-
-
-  bzero (buf, sizeof (buf));
-  bzero (a[0].Name, sizeof (a[0].Name));
-  fgets (buf, sizeof buf, fn);
-  for (i = 0; i <= 24; i++)
-    if (buf[i] > 20)
-      a[0].Name[i] = buf[i];
-  a[0].nombre = a[0].Name;
-  fclose (fn);
-
+    bzero(buf, sizeof(buf));
+    fputs(a[0].nombre, fn);
+    fputs("\n", fn);
+    fclose(fn);
 };
 
-void
-HOR::savebank (char *filename)
+void HOR::loadfile(char *filename)
 {
-  int i,j;
-  FILE *fn;
-  char buf[2048];
-  strcpy(SavedBank,filename); 
-  fn = fopen (filename, "w");
 
-  bzero(buf,sizeof(buf));
-  sprintf(buf,"%s\n",VERSION);
-  fputs(buf,fn);
+    int i;
+    FILE *fn;
+    char buf[2048];
+    float Data_Version;
 
-  for (j = 1; j <= 32; j++)
-    {
-      for (i = 1; i <= 10; i++)
-	{
-	  bzero (buf, sizeof (buf));
-	  sprintf (buf, "%d,%f,%f,%d\n",
-		   Banco[j].Operator[i].harmonic,
-		   Banco[j].Operator[i].harmonic_fine,
-		   Banco[j].Operator[i].volumen,Banco[j].Operator[i].marimba);
-	  fputs (buf, fn);
-	}
-
-      bzero (buf, sizeof (buf));
-      sprintf (buf, "%f,%d,%f,%f,%f,%d,%f,%f\n",
-	       Banco[j].Organ_Master_Volume, Banco[j].organ_transpose, Banco[j].Pitch_LFO_Speed,
-	       Banco[j].Pitch_LFO_Delay, Banco[j].Rotary_LFO_Speed, Banco[j].E_Rotary_On,
-	       Banco[j].LFOpitch, Banco[j].modulation);
+    if ((fn = fopen(filename, "r")) == NULL)
+        return;
 
 
-      fputs (buf, fn);
-      bzero (buf, sizeof (buf));
-      sprintf (buf, "%f,%d,%f,%d,%f,%f\n", Banco[j].attack, Banco[j].E_Reverb_On,
-	       Banco[j].detune, Banco[j].E_Delay_On, Banco[j].Delay_Delay,
-	       Banco[j].Delay_Volume);
-      fputs (buf, fn);
-      bzero (buf, sizeof (buf));
-      sprintf
-	(buf, "%d,%d,%f,%d,%f,%f,%f\n", Banco[j].scaling, Banco[j].E_Chorus_On,
-	 Banco[j].Chorus_Delay, Banco[j].Reverb_Preset, Banco[j].Chorus_LFO_Speed,
-	 Banco[j].Chorus_LFO_Amplitude, Banco[j].Chorus_Volume);
-      fputs (buf, fn);
+    bzero(buf, sizeof(buf));
+    fgets(buf, sizeof buf, fn);
+    sscanf(buf, "%f\n", &Data_Version);
 
-     bzero (buf, sizeof (buf));
-     sprintf (buf, "%f,%f,%f,%f,%f\n", Banco[j].decay, Banco[j].sustain, Banco[j].p_attack, Banco[j].p_decay,
-             Banco[j].Rotary_LFO_Amplitude);
-     fputs (buf, fn);
-     for (i = 1; i <= 22; i++)
-        {           
-          bzero (buf, sizeof (buf));
-          sprintf (buf, "%f\n",Banco[j].Normalize[i]);
-          fputs (buf, fn);
+
+    if (Data_Version < 1.11) {
+        printf("old file format not supported\n");
+        fclose(fn);
+        return;
+    }
+
+    New();
+
+    for (i = 1; i <= 10; i++) {
+        bzero(buf, sizeof(buf));
+        fgets(buf, sizeof buf, fn);
+        sscanf(buf, "%d,%f,%f,%d", &a[0].Operator[i].harmonic, &a[0].Operator[i].harmonic_fine,
+               &a[0].Operator[i].volumen, &a[0].Operator[i].marimba);
+    }
+
+    bzero(buf, sizeof(buf));
+    fgets(buf, sizeof buf, fn);
+    sscanf(buf, "%f,%d,%f,%f,%f,%d,%f,%f", &a[0].Organ_Master_Volume,
+           &a[0].organ_transpose, &a[0].Pitch_LFO_Speed, &a[0].Pitch_LFO_Delay,
+           &a[0].Rotary_LFO_Speed, &a[0].E_Rotary_On, &a[0].LFOpitch, &a[0].modulation);
+
+    bzero(buf, sizeof(buf));
+    fgets(buf, sizeof buf, fn);
+    sscanf(buf, "%f,%d,%f,%d,%f,%f", &a[0].attack, &a[0].E_Reverb_On,
+           &a[0].detune, &a[0].E_Delay_On, &a[0].Delay_Delay, &a[0].Delay_Volume);
+
+    bzero(buf, sizeof(buf));
+    fgets(buf, sizeof buf, fn);
+    sscanf(buf, "%d,%d,%f,%d,%f,%f,%f\n", &a[0].scaling, &a[0].E_Chorus_On,
+           &a[0].Chorus_Delay, &a[0].Reverb_Preset, &a[0].Chorus_LFO_Speed,
+           &a[0].Chorus_LFO_Amplitude, &a[0].Chorus_Volume);
+
+
+    bzero(buf, sizeof(buf));
+    fgets(buf, sizeof buf, fn);
+    sscanf(buf, "%f,%f,%f,%f,%f\n", &a[0].decay, &a[0].sustain, &a[0].p_attack,
+           &a[0].p_decay, &a[0].Rotary_LFO_Amplitude);
+
+    for (i = 1; i <= 22; i++) {
+        bzero(buf, sizeof(buf));
+        fgets(buf, sizeof buf, fn);
+        sscanf(buf, "%f\n", &a[0].Normalize[i]);
+    }
+
+    if (Data_Version >= 1.12) {
+        bzero(buf, sizeof(buf));
+        fgets(buf, sizeof buf, fn);
+        sscanf(buf, "%d %d,%f,%f,%f,%f,%f,%f\n", &a[0].Speed_Sync, &a[0].Click,
+               &a[0].Click_Vol, &a[0].Click2_Vol, &a[0].Click_Freq,
+               &a[0].Click_Freq2, &a[0].Click_Vol1, &a[0].Click_Vol2);
+
+
+        for (i = 1; i <= 10; i++) {
+            bzero(buf, sizeof(buf));
+            fgets(buf, sizeof buf, fn);
+            sscanf(buf, "%d\n", &a[0].Operator[i].wave);
+        }
+    }
+
+    if (Data_Version >= 1.13) {
+
+        bzero(buf, sizeof(buf));
+        fgets(buf, sizeof buf, fn);
+        sscanf(buf, "%d,%d,%d\n", &a[0].LFO_Wave, &a[0].Chorus_Wave, &a[0].Rotary_Wave);
+    }
+
+
+    bzero(buf, sizeof(buf));
+    bzero(a[0].Name, sizeof(a[0].Name));
+    fgets(buf, sizeof buf, fn);
+    for (i = 0; i <= 24; i++)
+        if (buf[i] > 20)
+            a[0].Name[i] = buf[i];
+    a[0].nombre = a[0].Name;
+    fclose(fn);
+};
+
+void HOR::savebank(char *filename)
+{
+    int i, j;
+    FILE *fn;
+    char buf[2048];
+    strcpy(SavedBank, filename);
+    fn = fopen(filename, "w");
+
+    bzero(buf, sizeof(buf));
+    sprintf(buf, "%s\n", VERSION);
+    fputs(buf, fn);
+
+    for (j = 1; j <= 32; j++) {
+        for (i = 1; i <= 10; i++) {
+            bzero(buf, sizeof(buf));
+            sprintf(buf, "%d,%f,%f,%d\n", Banco[j].Operator[i].harmonic,
+                    Banco[j].Operator[i].harmonic_fine,
+                    Banco[j].Operator[i].volumen, Banco[j].Operator[i].marimba);
+            fputs(buf, fn);
         }
 
-     bzero (buf, sizeof (buf));
-     sprintf (buf, "%d,%d,%f,%f,%f,%f,%f,%f\n", Banco[j].Speed_Sync,Banco[j].Click, Banco[j].Click_Vol, Banco[j].Click2_Vol, Banco[j].Click_Freq,
-             Banco[j].Click_Freq2,Banco[j].Click_Vol1,Banco[j].Click_Vol2);
-     fputs (buf, fn);
- 
-   for (i = 1; i <= 10; i++)
-      {
-          bzero (buf, sizeof (buf));
-          sprintf (buf, "%d\n",Banco[j].Operator[i].wave);
-          fputs(buf,fn);
-      }
-   
+        bzero(buf, sizeof(buf));
+        sprintf(buf, "%f,%d,%f,%f,%f,%d,%f,%f\n", Banco[j].Organ_Master_Volume,
+                Banco[j].organ_transpose, Banco[j].Pitch_LFO_Speed,
+                Banco[j].Pitch_LFO_Delay, Banco[j].Rotary_LFO_Speed,
+                Banco[j].E_Rotary_On, Banco[j].LFOpitch, Banco[j].modulation);
 
 
-   bzero (buf, sizeof (buf));
-   sprintf (buf, "%d,%d,%d\n",Banco[j].LFO_Wave,Banco[j].Chorus_Wave,Banco[j].Rotary_Wave);
-   fputs (buf, fn);
-   
+        fputs(buf, fn);
+        bzero(buf, sizeof(buf));
+        sprintf(buf, "%f,%d,%f,%d,%f,%f\n", Banco[j].attack,
+                Banco[j].E_Reverb_On, Banco[j].detune, Banco[j].E_Delay_On,
+                Banco[j].Delay_Delay, Banco[j].Delay_Volume);
+        fputs(buf, fn);
+        bzero(buf, sizeof(buf));
+        sprintf(buf, "%d,%d,%f,%d,%f,%f,%f\n", Banco[j].scaling, Banco[j].E_Chorus_On,
+                Banco[j].Chorus_Delay, Banco[j].Reverb_Preset, Banco[j].Chorus_LFO_Speed,
+                Banco[j].Chorus_LFO_Amplitude, Banco[j].Chorus_Volume);
+        fputs(buf, fn);
 
-      bzero (buf, sizeof (buf));
-      for (i = 0; i <= 24; i++)
-	buf[i] = Banco[j].Name[i];
-      fputs (buf, fn);
-      fputs ("\n", fn);
-      fputs ("---\n", fn);
-    }
-  fclose (fn);
-
-};
-
-
-void
-HOR::loadbank (char *filename)
-{
-
-  int i,j;
-  FILE *fn;
-  char buf[2048];
-  float Data_Version;
-  
-  
-  if ((fn = fopen (filename, "r")) == NULL) return;
-
-  bzero (buf, sizeof (buf));
-  fgets (buf, sizeof buf, fn);
-  sscanf(buf, "%f\n",&Data_Version);
-            
-  if ( Data_Version<1.11)
-     {
-      printf("old file format, please install the default bank file\n");     
-      fclose(fn);
-      return;
-     } 
-  New_Bank();
-
-  for (j = 1; j <= 32; j++)
-    {
-      for (i = 1; i <= 10; i++)
-	{
-	  bzero (buf, sizeof (buf));
-	  fgets (buf, sizeof buf, fn);
-
-	  sscanf (buf, "%d,%f,%f,%d",
-		  &Banco[j].Operator[i].harmonic,
-		  &Banco[j].Operator[i].harmonic_fine,
-		  &Banco[j].Operator[i].volumen,&Banco[j].Operator[i].marimba);
-	}
-
-      bzero (buf, sizeof (buf));
-      fgets (buf, sizeof buf, fn);
-      sscanf (buf,
-	      "%f,%d,%f,%f,%f,%d,%f,%f", &Banco[j].Organ_Master_Volume,
-	      &Banco[j].organ_transpose, &Banco[j].Pitch_LFO_Speed, &Banco[j].Pitch_LFO_Delay,
-	      &Banco[j].Rotary_LFO_Speed, &Banco[j].E_Rotary_On, &Banco[j].LFOpitch,
-	      &Banco[j].modulation);
-
-      bzero (buf, sizeof (buf));
-      fgets (buf, sizeof buf, fn);
-      sscanf (buf,
-	      "%f,%d,%f,%d,%f,%f", &Banco[j].attack, &Banco[j].E_Reverb_On,
-	      &Banco[j].detune, &Banco[j].E_Delay_On, &Banco[j].Delay_Delay,
-	      &Banco[j].Delay_Volume);
-
-      bzero (buf, sizeof (buf));
-      fgets (buf, sizeof buf, fn);
-      sscanf
-	(buf, "%d,%d,%f,%d,%f,%f,%f\n", &Banco[j].scaling, &Banco[j].E_Chorus_On,
-	 &Banco[j].Chorus_Delay, &Banco[j].Reverb_Preset, &Banco[j].Chorus_LFO_Speed,
-	 &Banco[j].Chorus_LFO_Amplitude, &Banco[j].Chorus_Volume);
-
-
-     bzero (buf, sizeof (buf));
-     fgets (buf, sizeof buf, fn);
-     sscanf (buf, "%f,%f,%f,%f,%f\n", &Banco[j].decay, &Banco[j].sustain, &Banco[j].p_attack, &Banco[j].p_decay,
-             &Banco[j].Rotary_LFO_Amplitude);
-     for (i = 1; i <= 22; i++)
-        {           
-          bzero (buf, sizeof (buf));
-          fgets (buf, sizeof buf, fn);
-          sscanf (buf, "%f\n",&Banco[j].Normalize[i]);
+        bzero(buf, sizeof(buf));
+        sprintf(buf, "%f,%f,%f,%f,%f\n", Banco[j].decay, Banco[j].sustain,
+                Banco[j].p_attack, Banco[j].p_decay, Banco[j].Rotary_LFO_Amplitude);
+        fputs(buf, fn);
+        for (i = 1; i <= 22; i++) {
+            bzero(buf, sizeof(buf));
+            sprintf(buf, "%f\n", Banco[j].Normalize[i]);
+            fputs(buf, fn);
         }
 
-      if (Data_Version>=1.12)
-      {
-       bzero (buf, sizeof (buf));
-       fgets (buf, sizeof buf, fn);
-       sscanf (buf, "%d,%d,%f,%f,%f,%f,%f,%f\n", &Banco[j].Speed_Sync,&Banco[j].Click, &Banco[j].Click_Vol, &Banco[j].Click2_Vol, &Banco[j].Click_Freq,
-             &Banco[j].Click_Freq2,&Banco[j].Click_Vol1,&Banco[j].Click_Vol2);
+        bzero(buf, sizeof(buf));
+        sprintf(buf, "%d,%d,%f,%f,%f,%f,%f,%f\n", Banco[j].Speed_Sync, Banco[j].Click,
+                Banco[j].Click_Vol, Banco[j].Click2_Vol, Banco[j].Click_Freq,
+                Banco[j].Click_Freq2, Banco[j].Click_Vol1, Banco[j].Click_Vol2);
+        fputs(buf, fn);
 
-       
-    for (i = 1; i <= 10; i++)
-     {
-       bzero (buf, sizeof (buf));
-       fgets (buf, sizeof buf, fn);
-       sscanf (buf, "%d\n",&Banco[j].Operator[i].wave);
-      }
-
-       } 
-
-    if (Data_Version>=1.13)
-       {
-         bzero (buf, sizeof (buf));
-         fgets (buf, sizeof buf, fn);
-         sscanf (buf, "%d,%d,%d\n",&Banco[j].LFO_Wave,&Banco[j].Chorus_Wave,&Banco[j].Rotary_Wave);
-           
+        for (i = 1; i <= 10; i++) {
+            bzero(buf, sizeof(buf));
+            sprintf(buf, "%d\n", Banco[j].Operator[i].wave);
+            fputs(buf, fn);
         }
-                
 
 
+        bzero(buf, sizeof(buf));
+        sprintf(buf, "%d,%d,%d\n", Banco[j].LFO_Wave, Banco[j].Chorus_Wave,
+                Banco[j].Rotary_Wave);
+        fputs(buf, fn);
 
-      bzero (buf, sizeof (buf));
-      bzero (Banco[j].Name, sizeof (Banco[j].Name));
-      fgets (buf, sizeof buf, fn);
-      for (i = 0; i <= 24; i++)
-	if (buf[i] > 20)
-	  Banco[j].Name[i] = buf[i];
-          Banco[j].nombre=Banco[j].Name;
-      bzero (buf, sizeof (buf));
-      fgets (buf, sizeof buf, fn);
 
+        bzero(buf, sizeof(buf));
+        for (i = 0; i <= 24; i++)
+            buf[i] = Banco[j].Name[i];
+        fputs(buf, fn);
+        fputs("\n", fn);
+        fputs("---\n", fn);
+    }
+    fclose(fn);
+};
+
+
+void HOR::loadbank(char *filename)
+{
+
+    int i, j;
+    FILE *fn;
+    char buf[2048];
+    float Data_Version;
+
+
+    if ((fn = fopen(filename, "r")) == NULL)
+        return;
+
+    bzero(buf, sizeof(buf));
+    fgets(buf, sizeof buf, fn);
+    sscanf(buf, "%f\n", &Data_Version);
+
+    if (Data_Version < 1.11) {
+        printf("old file format, please install the default bank file\n");
+        fclose(fn);
+        return;
+    }
+    New_Bank();
+
+    for (j = 1; j <= 32; j++) {
+        for (i = 1; i <= 10; i++) {
+            bzero(buf, sizeof(buf));
+            fgets(buf, sizeof buf, fn);
+
+            sscanf(buf, "%d,%f,%f,%d", &Banco[j].Operator[i].harmonic,
+                   &Banco[j].Operator[i].harmonic_fine,
+                   &Banco[j].Operator[i].volumen, &Banco[j].Operator[i].marimba);
+        }
+
+        bzero(buf, sizeof(buf));
+        fgets(buf, sizeof buf, fn);
+        sscanf(buf, "%f,%d,%f,%f,%f,%d,%f,%f", &Banco[j].Organ_Master_Volume,
+               &Banco[j].organ_transpose, &Banco[j].Pitch_LFO_Speed,
+               &Banco[j].Pitch_LFO_Delay, &Banco[j].Rotary_LFO_Speed,
+               &Banco[j].E_Rotary_On, &Banco[j].LFOpitch, &Banco[j].modulation);
+
+        bzero(buf, sizeof(buf));
+        fgets(buf, sizeof buf, fn);
+        sscanf(buf, "%f,%d,%f,%d,%f,%f", &Banco[j].attack,
+               &Banco[j].E_Reverb_On, &Banco[j].detune, &Banco[j].E_Delay_On,
+               &Banco[j].Delay_Delay, &Banco[j].Delay_Volume);
+
+        bzero(buf, sizeof(buf));
+        fgets(buf, sizeof buf, fn);
+        sscanf(buf, "%d,%d,%f,%d,%f,%f,%f\n", &Banco[j].scaling, &Banco[j].E_Chorus_On,
+               &Banco[j].Chorus_Delay, &Banco[j].Reverb_Preset, &Banco[j].Chorus_LFO_Speed,
+               &Banco[j].Chorus_LFO_Amplitude, &Banco[j].Chorus_Volume);
+
+
+        bzero(buf, sizeof(buf));
+        fgets(buf, sizeof buf, fn);
+        sscanf(buf, "%f,%f,%f,%f,%f\n", &Banco[j].decay, &Banco[j].sustain,
+               &Banco[j].p_attack, &Banco[j].p_decay, &Banco[j].Rotary_LFO_Amplitude);
+        for (i = 1; i <= 22; i++) {
+            bzero(buf, sizeof(buf));
+            fgets(buf, sizeof buf, fn);
+            sscanf(buf, "%f\n", &Banco[j].Normalize[i]);
+        }
+
+        if (Data_Version >= 1.12) {
+            bzero(buf, sizeof(buf));
+            fgets(buf, sizeof buf, fn);
+            sscanf(buf, "%d,%d,%f,%f,%f,%f,%f,%f\n", &Banco[j].Speed_Sync,
+                   &Banco[j].Click, &Banco[j].Click_Vol, &Banco[j].Click2_Vol,
+                   &Banco[j].Click_Freq, &Banco[j].Click_Freq2,
+                   &Banco[j].Click_Vol1, &Banco[j].Click_Vol2);
+
+
+            for (i = 1; i <= 10; i++) {
+                bzero(buf, sizeof(buf));
+                fgets(buf, sizeof buf, fn);
+                sscanf(buf, "%d\n", &Banco[j].Operator[i].wave);
+            }
+        }
+
+        if (Data_Version >= 1.13) {
+            bzero(buf, sizeof(buf));
+            fgets(buf, sizeof buf, fn);
+            sscanf(buf, "%d,%d,%d\n", &Banco[j].LFO_Wave, &Banco[j].Chorus_Wave,
+                   &Banco[j].Rotary_Wave);
+        }
+
+
+        bzero(buf, sizeof(buf));
+        bzero(Banco[j].Name, sizeof(Banco[j].Name));
+        fgets(buf, sizeof buf, fn);
+        for (i = 0; i <= 24; i++)
+            if (buf[i] > 20)
+                Banco[j].Name[i] = buf[i];
+        Banco[j].nombre = Banco[j].Name;
+        bzero(buf, sizeof(buf));
+        fgets(buf, sizeof buf, fn);
     }
 
-  fclose (fn);
+    fclose(fn);
 };
 
 
-void
-HOR::loadrhyt(char *filename)
+void HOR::loadrhyt(char *filename)
 {
-   int i;
-   FILE *fs;
-   char temp[1024];
-   
-   bzero(temp,sizeof(temp));
- 
-  if ((fs = fopen (filename, "r")) != NULL)
-   {
-         int linea = 0;
-         Num_Rhythm= 1;
-         int w;    
-      while (fgets(temp, sizeof temp, fs) != NULL)
-          {
-             linea++;
-             switch (linea)
-           { 
-             case 1:
-              bzero(Rt[Num_Rhythm].Nom,sizeof(Rt[Num_Rhythm].Nom));
-              for (i = 0; i <= (int) strlen(temp) - 2; i++) Rt[Num_Rhythm].Nom[i] = temp[i];                   
-              break; 
-             case 2:
-              bzero(Rt[Num_Rhythm].Nfile,sizeof(Rt[Num_Rhythm].Nfile));
-              for (i = 0; i <= (int) strlen(temp) - 2; i++) Rt[Num_Rhythm].Nfile[i] = temp[i];
-              break;
-             case 3:
-              sscanf (temp,"%d", &Rt[Num_Rhythm].bars);
-              break;
-             case 4:
-              sscanf (temp,"%d", &Rt[Num_Rhythm].quarter_note);
-              break;
-             case 5: 
-             sscanf(temp,"%d,%d,%d,%d",&Rt[Num_Rhythm].Line_Bass_Note[1],&Rt[Num_Rhythm].Line_Bass_Note[2],&Rt[Num_Rhythm].Line_Bass_Note[3],&Rt[Num_Rhythm].Line_Bass_Note[4]);
-             for (i=1; i<Rt[Num_Rhythm].bars*Rt[Num_Rhythm].quarter_note; i++)
-             {
-              w = i*4;
-              bzero(temp,sizeof(temp));
-              fgets(temp, sizeof temp, fs);
-              sscanf(temp,"%d,%d,%d,%d",&Rt[Num_Rhythm].Line_Bass_Note[w+1],&Rt[Num_Rhythm].Line_Bass_Note[w+2],&Rt[Num_Rhythm].Line_Bass_Note[w+3],&Rt[Num_Rhythm].Line_Bass_Note[w+4]);
-             } 
-             bzero(temp,sizeof(temp));
-             fgets(temp, sizeof temp, fs);
-             sscanf(temp,"%d,%d,%d,%d",&Rt[Num_Rhythm].Line_Bass_Velocity[1],&Rt[Num_Rhythm].Line_Bass_Velocity[2],&Rt[Num_Rhythm].Line_Bass_Velocity[3],&Rt[Num_Rhythm].Line_Bass_Velocity[4]);
-             for (i=1; i<Rt[Num_Rhythm].bars*Rt[Num_Rhythm].quarter_note; i++)
-             {
-              w = i*4;
-              bzero(temp,sizeof(temp));
-              fgets(temp, sizeof temp, fs);
-              sscanf(temp,"%d,%d,%d,%d",&Rt[Num_Rhythm].Line_Bass_Velocity[w+1],&Rt[Num_Rhythm].Line_Bass_Velocity[w+2],&Rt[Num_Rhythm].Line_Bass_Velocity[w+3],&Rt[Num_Rhythm].Line_Bass_Velocity[w+4]);
-             }
-              break;
-              case 6:
-              break;
-              case 7:
-              break;
-              case 8:
-              break;
-              case 9:
-              break;
-              case 10:
-              break;
-              case 11:
-              linea = 0;
-              Num_Rhythm++;
-              break;
-          }
- 
+    int i;
+    FILE *fs;
+    char temp[1024];
 
+    bzero(temp, sizeof(temp));
 
-         }
-       }
-
-
-
-
+    if ((fs = fopen(filename, "r")) != NULL) {
+        int linea = 0;
+        Num_Rhythm = 1;
+        int w;
+        while (fgets(temp, sizeof temp, fs) != NULL) {
+            linea++;
+            switch (linea) {
+            case 1:
+                bzero(Rt[Num_Rhythm].Nom, sizeof(Rt[Num_Rhythm].Nom));
+                for (i = 0; i <= (int)strlen(temp) - 2; i++)
+                    Rt[Num_Rhythm].Nom[i] = temp[i];
+                break;
+            case 2:
+                bzero(Rt[Num_Rhythm].Nfile, sizeof(Rt[Num_Rhythm].Nfile));
+                for (i = 0; i <= (int)strlen(temp) - 2; i++)
+                    Rt[Num_Rhythm].Nfile[i] = temp[i];
+                break;
+            case 3:
+                sscanf(temp, "%d", &Rt[Num_Rhythm].bars);
+                break;
+            case 4:
+                sscanf(temp, "%d", &Rt[Num_Rhythm].quarter_note);
+                break;
+            case 5:
+                sscanf(temp, "%d,%d,%d,%d", &Rt[Num_Rhythm].Line_Bass_Note[1],
+                       &Rt[Num_Rhythm].Line_Bass_Note[2],
+                       &Rt[Num_Rhythm].Line_Bass_Note[3],
+                       &Rt[Num_Rhythm].Line_Bass_Note[4]);
+                for (i = 1; i < Rt[Num_Rhythm].bars * Rt[Num_Rhythm].quarter_note; i++) {
+                    w = i * 4;
+                    bzero(temp, sizeof(temp));
+                    fgets(temp, sizeof temp, fs);
+                    sscanf(temp, "%d,%d,%d,%d", &Rt[Num_Rhythm].Line_Bass_Note[w + 1],
+                           &Rt[Num_Rhythm].Line_Bass_Note[w + 2],
+                           &Rt[Num_Rhythm].Line_Bass_Note[w + 3],
+                           &Rt[Num_Rhythm].Line_Bass_Note[w + 4]);
+                }
+                bzero(temp, sizeof(temp));
+                fgets(temp, sizeof temp, fs);
+                sscanf(temp, "%d,%d,%d,%d", &Rt[Num_Rhythm].Line_Bass_Velocity[1],
+                       &Rt[Num_Rhythm].Line_Bass_Velocity[2],
+                       &Rt[Num_Rhythm].Line_Bass_Velocity[3],
+                       &Rt[Num_Rhythm].Line_Bass_Velocity[4]);
+                for (i = 1; i < Rt[Num_Rhythm].bars * Rt[Num_Rhythm].quarter_note; i++) {
+                    w = i * 4;
+                    bzero(temp, sizeof(temp));
+                    fgets(temp, sizeof temp, fs);
+                    sscanf(temp, "%d,%d,%d,%d",
+                           &Rt[Num_Rhythm].Line_Bass_Velocity[w + 1],
+                           &Rt[Num_Rhythm].Line_Bass_Velocity[w + 2],
+                           &Rt[Num_Rhythm].Line_Bass_Velocity[w + 3],
+                           &Rt[Num_Rhythm].Line_Bass_Velocity[w + 4]);
+                }
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            case 8:
+                break;
+            case 9:
+                break;
+            case 10:
+                break;
+            case 11:
+                linea = 0;
+                Num_Rhythm++;
+                break;
+            }
+        }
+    }
 };
 
 
-void
-HOR::saverhyt(char *filename)
+void HOR::saverhyt(char *filename)
 {
-   int i,j;
-   FILE *fs;
-   char temp[1024];
-   int w=0;   
-   bzero(temp,sizeof(temp));
- 
-  if ((fs = fopen (filename, "w")) != NULL)
-   {     
-     for(Num_Rhythm=1; Num_Rhythm<=20; Num_Rhythm++)
-       {    
-         bzero(temp,sizeof(temp));
-         sprintf(temp,"%s\n",Rt[Num_Rhythm].Nom);
-         fputs (temp, fs);        
-         bzero(temp,sizeof(temp));           
-         sprintf(temp,"%s\n",Rt[Num_Rhythm].Nfile);
-         fputs (temp, fs);
-         bzero(temp,sizeof(temp));
-         sprintf (temp,"%d\n", Rt[Num_Rhythm].bars);
-         fputs (temp, fs);
-         bzero(temp,sizeof(temp));
-         sprintf (temp,"%d\n", Rt[Num_Rhythm].quarter_note);
-         fputs (temp, fs);
-         bzero(temp,sizeof(temp));
-         sprintf(temp,"%d,%d,%d,%d\n",Rt[Num_Rhythm].Line_Bass_Note[1],Rt[Num_Rhythm].Line_Bass_Note[2],Rt[Num_Rhythm].Line_Bass_Note[3],Rt[Num_Rhythm].Line_Bass_Note[4]);
-         fputs (temp, fs);
-         for (i=1; i<Rt[Num_Rhythm].bars*Rt[Num_Rhythm].quarter_note; i++)
-             {
-              w = i*4;
-              bzero(temp,sizeof(temp));
-              sprintf(temp,"%d,%d,%d,%d\n",Rt[Num_Rhythm].Line_Bass_Note[w+1],Rt[Num_Rhythm].Line_Bass_Note[w+2],Rt[Num_Rhythm].Line_Bass_Note[w+3],Rt[Num_Rhythm].Line_Bass_Note[w+4]);
-              fputs (temp, fs);
-             } 
-             bzero(temp,sizeof(temp));
-             sprintf(temp,"%d,%d,%d,%d\n",Rt[Num_Rhythm].Line_Bass_Velocity[1],Rt[Num_Rhythm].Line_Bass_Velocity[2],Rt[Num_Rhythm].Line_Bass_Velocity[3],Rt[Num_Rhythm].Line_Bass_Velocity[4]);
-             fputs (temp, fs);
+    int i, j;
+    FILE *fs;
+    char temp[1024];
+    int w = 0;
+    bzero(temp, sizeof(temp));
 
-             for (i=1; i<Rt[Num_Rhythm].bars*Rt[Num_Rhythm].quarter_note; i++)
-             {
-              w = i*4;
-              bzero(temp,sizeof(temp));
-              sprintf(temp,"%d,%d,%d,%d\n",Rt[Num_Rhythm].Line_Bass_Velocity[w+1],Rt[Num_Rhythm].Line_Bass_Velocity[w+2],Rt[Num_Rhythm].Line_Bass_Velocity[w+3],Rt[Num_Rhythm].Line_Bass_Velocity[w+4]);
-              fputs (temp, fs);
-             }
-              for (j=1; j<=6; j++)
-              {
-              bzero(temp, sizeof(temp));
-              sprintf(temp, "0\n");
-              fputs(temp,fs);
-              }
-          }
-     fclose(fs);
-  }
+    if ((fs = fopen(filename, "w")) != NULL) {
+        for (Num_Rhythm = 1; Num_Rhythm <= 20; Num_Rhythm++) {
+            bzero(temp, sizeof(temp));
+            sprintf(temp, "%s\n", Rt[Num_Rhythm].Nom);
+            fputs(temp, fs);
+            bzero(temp, sizeof(temp));
+            sprintf(temp, "%s\n", Rt[Num_Rhythm].Nfile);
+            fputs(temp, fs);
+            bzero(temp, sizeof(temp));
+            sprintf(temp, "%d\n", Rt[Num_Rhythm].bars);
+            fputs(temp, fs);
+            bzero(temp, sizeof(temp));
+            sprintf(temp, "%d\n", Rt[Num_Rhythm].quarter_note);
+            fputs(temp, fs);
+            bzero(temp, sizeof(temp));
+            sprintf(temp, "%d,%d,%d,%d\n", Rt[Num_Rhythm].Line_Bass_Note[1],
+                    Rt[Num_Rhythm].Line_Bass_Note[2], Rt[Num_Rhythm].Line_Bass_Note[3],
+                    Rt[Num_Rhythm].Line_Bass_Note[4]);
+            fputs(temp, fs);
+            for (i = 1; i < Rt[Num_Rhythm].bars * Rt[Num_Rhythm].quarter_note; i++) {
+                w = i * 4;
+                bzero(temp, sizeof(temp));
+                sprintf(temp, "%d,%d,%d,%d\n", Rt[Num_Rhythm].Line_Bass_Note[w + 1],
+                        Rt[Num_Rhythm].Line_Bass_Note[w + 2],
+                        Rt[Num_Rhythm].Line_Bass_Note[w + 3],
+                        Rt[Num_Rhythm].Line_Bass_Note[w + 4]);
+                fputs(temp, fs);
+            }
+            bzero(temp, sizeof(temp));
+            sprintf(temp, "%d,%d,%d,%d\n", Rt[Num_Rhythm].Line_Bass_Velocity[1],
+                    Rt[Num_Rhythm].Line_Bass_Velocity[2],
+                    Rt[Num_Rhythm].Line_Bass_Velocity[3],
+                    Rt[Num_Rhythm].Line_Bass_Velocity[4]);
+            fputs(temp, fs);
+
+            for (i = 1; i < Rt[Num_Rhythm].bars * Rt[Num_Rhythm].quarter_note; i++) {
+                w = i * 4;
+                bzero(temp, sizeof(temp));
+                sprintf(temp, "%d,%d,%d,%d\n", Rt[Num_Rhythm].Line_Bass_Velocity[w + 1],
+                        Rt[Num_Rhythm].Line_Bass_Velocity[w + 2],
+                        Rt[Num_Rhythm].Line_Bass_Velocity[w + 3],
+                        Rt[Num_Rhythm].Line_Bass_Velocity[w + 4]);
+                fputs(temp, fs);
+            }
+            for (j = 1; j <= 6; j++) {
+                bzero(temp, sizeof(temp));
+                sprintf(temp, "0\n");
+                fputs(temp, fs);
+            }
+        }
+        fclose(fs);
+    }
 };
 
-void
-HOR::ScanDir()
+void HOR::ScanDir()
 {
 
-char nomdir[256];
-char nombank[256];
+    char nomdir[256];
+    char nombank[256];
 
-Nums=0;
+    Nums = 0;
 
-bzero(nomdir,sizeof(nomdir));
-sprintf (nomdir, "%s%s", getenv ("HOME"), "/.horgand");
+    bzero(nomdir, sizeof(nomdir));
+    sprintf(nomdir, "%s%s", getenv("HOME"), "/.horgand");
 
-DIR *dir=opendir(nomdir);
-if (dir==NULL) return;
-
-
-struct dirent *fs;
-
-while ((fs=readdir(dir)))
-{
-
-if (strstr(fs->d_name,BANK_EXTENSION)!=NULL)
-  { 
-    bzero(nombank,sizeof(nombank));
-    sprintf(nombank,"%s/%s",nomdir,fs->d_name);
-    ReadNames(nombank,fs->d_name);
-    if (Nums > 320) return;  
-   }
-
-   
-}
+    DIR *dir = opendir(nomdir);
+    if (dir == NULL)
+        return;
 
 
-closedir(dir);
+    struct dirent *fs;
 
-};
+    while ((fs = readdir(dir))) {
 
-
-void
-HOR::ReadNames(char *filename,char *bankname)
-{
-
-  int i,j,k;
-  FILE *fn;
-  char buf[2048];
-  float Data_Version;
-
-  if ((fn = fopen (filename, "r")) == NULL) return;
-
-  bzero (buf, sizeof (buf));
-  fgets (buf, sizeof buf, fn);
-  sscanf(buf,"%f\n",&Data_Version);          
-  if ( Data_Version<1.11)     {
-      printf("old file format, please install the default bank file\n");     
-      fclose(fn);
-      return;
-     } 
-
-  k=36;
-  if (Data_Version>=1.12) k=47;
-  if (Data_Version>=1.13) k=48;
- 
-  
-  for (j = 1; j <= 32; j++)
-    {
-      for (i = 1; i <= k; i++)
-	{
-	  bzero (buf, sizeof (buf));
-	  fgets (buf, sizeof buf, fn);
-	}
-
-
-      bzero (buf, sizeof (buf));
-      bzero (NBP[Nums].Name, sizeof (NBP[Nums].Name));
-      fgets (buf, sizeof buf, fn);
-      for (i = 0; i <= 24; i++)
-	if (buf[i] > 20)
-	  NBP[Nums].Name[i] = buf[i];
-      bzero (NBP[Nums].Bank, sizeof (NBP[Nums].Bank)); 	  
-          strcpy(NBP[Nums].Bank,bankname);
-          NBP[Nums].pos=j;
-          Nums++;
-          if (Nums > 999)
-           { 
-             printf("Sounds full\n");
-             fclose(fn);
-             return;
-           }
-           
-
-      bzero (buf, sizeof (buf));
-      fgets (buf, sizeof buf, fn);
-
+        if (strstr(fs->d_name, BANK_EXTENSION) != NULL) {
+            bzero(nombank, sizeof(nombank));
+            sprintf(nombank, "%s/%s", nomdir, fs->d_name);
+            ReadNames(nombank, fs->d_name);
+            if (Nums > 320)
+                return;
+        }
     }
 
-  fclose (fn);
+
+    closedir(dir);
 };
 
 
-void
-HOR::LoadSoundBank(int Num)
+void HOR::ReadNames(char *filename, char *bankname)
+{
+
+    int i, j, k;
+    FILE *fn;
+    char buf[2048];
+    float Data_Version;
+
+    if ((fn = fopen(filename, "r")) == NULL)
+        return;
+
+    bzero(buf, sizeof(buf));
+    fgets(buf, sizeof buf, fn);
+    sscanf(buf, "%f\n", &Data_Version);
+    if (Data_Version < 1.11) {
+        printf("old file format, please install the default bank file\n");
+        fclose(fn);
+        return;
+    }
+
+    k = 36;
+    if (Data_Version >= 1.12)
+        k = 47;
+    if (Data_Version >= 1.13)
+        k = 48;
+
+
+    for (j = 1; j <= 32; j++) {
+        for (i = 1; i <= k; i++) {
+            bzero(buf, sizeof(buf));
+            fgets(buf, sizeof buf, fn);
+        }
+
+
+        bzero(buf, sizeof(buf));
+        bzero(NBP[Nums].Name, sizeof(NBP[Nums].Name));
+        fgets(buf, sizeof buf, fn);
+        for (i = 0; i <= 24; i++)
+            if (buf[i] > 20)
+                NBP[Nums].Name[i] = buf[i];
+        bzero(NBP[Nums].Bank, sizeof(NBP[Nums].Bank));
+        strcpy(NBP[Nums].Bank, bankname);
+        NBP[Nums].pos = j;
+        Nums++;
+        if (Nums > 999) {
+            printf("Sounds full\n");
+            fclose(fn);
+            return;
+        }
+
+
+        bzero(buf, sizeof(buf));
+        fgets(buf, sizeof buf, fn);
+    }
+
+    fclose(fn);
+};
+
+
+void HOR::LoadSoundBank(int Num)
 {
 
 
-  float Data_Version;
-  int i,j,k;
-  FILE *fn;
-  char buf[2048];
-  char nomfile[256];
-  bzero(nomfile,sizeof(nomfile));
-  sprintf (nomfile, "%s%s%s", getenv ("HOME"), "/.horgand/",NBP[Num].Bank);
+    float Data_Version;
+    int i, j, k;
+    FILE *fn;
+    char buf[2048];
+    char nomfile[256];
+    bzero(nomfile, sizeof(nomfile));
+    sprintf(nomfile, "%s%s%s", getenv("HOME"), "/.horgand/", NBP[Num].Bank);
 
 
-  if ((fn = fopen (nomfile, "r")) == NULL) return;
+    if ((fn = fopen(nomfile, "r")) == NULL)
+        return;
 
-  bzero (buf, sizeof (buf));
-  fgets (buf, sizeof buf, fn);
-  sscanf(buf,"%f\n",&Data_Version);          
-  if (Data_Version<1.11)
-     {
-      printf("old file format, please install the default bank file\n");     
-      fclose(fn);
-      return;
-     } 
-
-  j=1;
-  k=38;
-  if (Data_Version>=1.12) k=49;
-  if (Data_Version>=1.13) k=50;
-  
-  while (j < NBP[Num].pos)
-    {
-    
-     for (i = 1; i <= k; i++)
-	{
-	  bzero (buf, sizeof (buf));
-	  fgets (buf, sizeof buf, fn);
-	}
-     j++;	
+    bzero(buf, sizeof(buf));
+    fgets(buf, sizeof buf, fn);
+    sscanf(buf, "%f\n", &Data_Version);
+    if (Data_Version < 1.11) {
+        printf("old file format, please install the default bank file\n");
+        fclose(fn);
+        return;
     }
 
-  New();
-  
-  for (i = 1; i <= 10; i++)
-    {
-      bzero (buf, sizeof (buf));
-      fgets (buf, sizeof buf, fn);
-      sscanf (buf, "%d,%f,%f,%d", &a[0].Operator[i].harmonic,
-	      &a[0].Operator[i].harmonic_fine,&a[0].Operator[i].volumen,&a[0].Operator[i].marimba);
+    j = 1;
+    k = 38;
+    if (Data_Version >= 1.12)
+        k = 49;
+    if (Data_Version >= 1.13)
+        k = 50;
+
+    while (j < NBP[Num].pos) {
+
+        for (i = 1; i <= k; i++) {
+            bzero(buf, sizeof(buf));
+            fgets(buf, sizeof buf, fn);
+        }
+        j++;
     }
 
-  bzero (buf, sizeof (buf));
-  fgets (buf, sizeof buf, fn);
-  sscanf (buf,
-	  "%f,%d,%f,%f,%f,%d,%f,%f", &a[0].Organ_Master_Volume, &a[0].organ_transpose, &a[0].Pitch_LFO_Speed,
-	  &a[0].Pitch_LFO_Delay, &a[0].Rotary_LFO_Speed, &a[0].E_Rotary_On, &a[0].LFOpitch, &a[0].modulation);
+    New();
 
-  bzero (buf, sizeof (buf));
-  fgets (buf, sizeof buf, fn);
-  sscanf (buf, "%f,%d,%f,%d,%f,%f", &a[0].attack, &a[0].E_Reverb_On, &a[0].detune, &a[0].E_Delay_On,
-	  &a[0].Delay_Delay, &a[0].Delay_Volume);
+    for (i = 1; i <= 10; i++) {
+        bzero(buf, sizeof(buf));
+        fgets(buf, sizeof buf, fn);
+        sscanf(buf, "%d,%f,%f,%d", &a[0].Operator[i].harmonic, &a[0].Operator[i].harmonic_fine,
+               &a[0].Operator[i].volumen, &a[0].Operator[i].marimba);
+    }
 
-  bzero (buf, sizeof (buf));
-  fgets (buf, sizeof buf, fn);
-  sscanf
-    (buf, "%d,%d,%f,%d,%f,%f,%f\n", &a[0].scaling, &a[0].E_Chorus_On, &a[0].Chorus_Delay, &a[0].Reverb_Preset,
-     &a[0].Chorus_LFO_Speed, &a[0].Chorus_LFO_Amplitude, &a[0].Chorus_Volume);
+    bzero(buf, sizeof(buf));
+    fgets(buf, sizeof buf, fn);
+    sscanf(buf, "%f,%d,%f,%f,%f,%d,%f,%f", &a[0].Organ_Master_Volume,
+           &a[0].organ_transpose, &a[0].Pitch_LFO_Speed, &a[0].Pitch_LFO_Delay,
+           &a[0].Rotary_LFO_Speed, &a[0].E_Rotary_On, &a[0].LFOpitch, &a[0].modulation);
 
+    bzero(buf, sizeof(buf));
+    fgets(buf, sizeof buf, fn);
+    sscanf(buf, "%f,%d,%f,%d,%f,%f", &a[0].attack, &a[0].E_Reverb_On,
+           &a[0].detune, &a[0].E_Delay_On, &a[0].Delay_Delay, &a[0].Delay_Volume);
 
-  bzero (buf, sizeof (buf));
-  fgets (buf, sizeof buf, fn);
-  sscanf (buf, "%f,%f,%f,%f,%f\n", &a[0].decay, &a[0].sustain, &a[0].p_attack, &a[0].p_decay,
-             &a[0].Rotary_LFO_Amplitude);
-  
-  for (i = 1; i <= 22; i++)
-  {           
-  bzero (buf, sizeof (buf));
-  fgets (buf, sizeof buf, fn);
-  sscanf (buf, "%f\n",&a[0].Normalize[i]);
-  }
-
-  if (Data_Version >= 1.12)
-  {
-  bzero (buf, sizeof (buf));
-  fgets (buf, sizeof buf, fn);
-  sscanf (buf, "%d,%d,%f,%f,%f,%f,%f,%f\n", &a[0].Speed_Sync,&a[0].Click,&a[0].Click_Vol,&a[0].Click2_Vol,&a[0].Click_Freq,&a[0].Click_Freq2,&a[0].Click_Vol1,&a[0].Click_Vol2);
-
-  
-   for (i = 1; i <= 10; i++)
-     {
-       bzero (buf, sizeof (buf));
-       fgets (buf, sizeof buf, fn);
-       sscanf (buf, "%d\n",&a[0].Operator[i].wave);
-      }
-
-  }
-
- if (Data_Version>=1.13)
-    {
-      bzero (buf, sizeof (buf));
-      fgets (buf, sizeof buf, fn);
-      sscanf (buf, "%d,%d,%d\n",&a[0].LFO_Wave,&a[0].Chorus_Wave,&a[0].Rotary_Wave);
-     }
-             
+    bzero(buf, sizeof(buf));
+    fgets(buf, sizeof buf, fn);
+    sscanf(buf, "%d,%d,%f,%d,%f,%f,%f\n", &a[0].scaling, &a[0].E_Chorus_On,
+           &a[0].Chorus_Delay, &a[0].Reverb_Preset, &a[0].Chorus_LFO_Speed,
+           &a[0].Chorus_LFO_Amplitude, &a[0].Chorus_Volume);
 
 
-  bzero (buf, sizeof (buf));
-  bzero (a[0].Name, sizeof (a[0].Name));
-  fgets (buf, sizeof buf, fn);
-  for (i = 0; i <= 24; i++)
-    if (buf[i] > 20)
-      a[0].Name[i] = buf[i];
-  a[0].nombre = a[0].Name;
-  fclose (fn);
-  
+    bzero(buf, sizeof(buf));
+    fgets(buf, sizeof buf, fn);
+    sscanf(buf, "%f,%f,%f,%f,%f\n", &a[0].decay, &a[0].sustain, &a[0].p_attack,
+           &a[0].p_decay, &a[0].Rotary_LFO_Amplitude);
+
+    for (i = 1; i <= 22; i++) {
+        bzero(buf, sizeof(buf));
+        fgets(buf, sizeof buf, fn);
+        sscanf(buf, "%f\n", &a[0].Normalize[i]);
+    }
+
+    if (Data_Version >= 1.12) {
+        bzero(buf, sizeof(buf));
+        fgets(buf, sizeof buf, fn);
+        sscanf(buf, "%d,%d,%f,%f,%f,%f,%f,%f\n", &a[0].Speed_Sync, &a[0].Click,
+               &a[0].Click_Vol, &a[0].Click2_Vol, &a[0].Click_Freq,
+               &a[0].Click_Freq2, &a[0].Click_Vol1, &a[0].Click_Vol2);
+
+
+        for (i = 1; i <= 10; i++) {
+            bzero(buf, sizeof(buf));
+            fgets(buf, sizeof buf, fn);
+            sscanf(buf, "%d\n", &a[0].Operator[i].wave);
+        }
+    }
+
+    if (Data_Version >= 1.13) {
+        bzero(buf, sizeof(buf));
+        fgets(buf, sizeof buf, fn);
+        sscanf(buf, "%d,%d,%d\n", &a[0].LFO_Wave, &a[0].Chorus_Wave, &a[0].Rotary_Wave);
+    }
+
+
+    bzero(buf, sizeof(buf));
+    bzero(a[0].Name, sizeof(a[0].Name));
+    fgets(buf, sizeof buf, fn);
+    for (i = 0; i <= 24; i++)
+        if (buf[i] > 20)
+            a[0].Name[i] = buf[i];
+    a[0].nombre = a[0].Name;
+    fclose(fn);
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
